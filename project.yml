@@ -1,0 +1,22 @@
+packages:
+    - name: unicodedatapoetry
+      shared: false
+      functions:
+        - name: postToMastodon
+          runtime: python:default
+          binary: false
+          main: ""
+          web: false
+          webSecure: false
+
+          triggers:
+          - name: cron-hourly
+            sourceType: scheduler
+            sourceDetails:
+              cron: "30 * * * *"
+
+          environment:
+              MASTODON_CLIENT_ID: "${MASTODON_CLIENT_ID}"
+              MASTODON_CLIENT_SECRET: "${MASTODON_CLIENT_SECRET}"
+              MASTODON_BASE_URL: "${MASTODON_BASE_URL}"
+              MASTODON_ACCESS_TOKEN: "${MASTODON_ACCESS_TOKEN}"

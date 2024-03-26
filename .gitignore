@@ -1,0 +1,6 @@
+.env
+.envrc
+venv
+
+.deployed/
+__deployer__.zip

@@ -5,25 +5,34 @@ import unicodedata
 from mastodon import Mastodon
 
 
-GOOD_RANGES = {
-    # start, length, word index
-    'taixuanjing': (119556, 83, -1),
+def setrange(*args):
+    return set(range(*args))
 
-    'emoji0': (9900, 100, 0),
-    'greekgods': (11223, 17, -1),
-    'kangxi': (12032, 213, -1),
-    'ideograph': (12832, 40, -1),
-    'phaistos': (66000, 45, -1),
-    'weather': (127744, 43, -1),
-    'emoji1': (127789, 975, -1),  # with some gaps
-    'alchemy': (128768, 115, 3),
-    'emoji2': (129292, 249, -1),
+
+GOOD_RANGES = {
+    # range, word index
+    'taixuanjing': ({*setrange(119556,119639)}-{119571}, -1),
+
+    'greekgods': (range(11223, 11240), -1),
+    'kangxi': (range(12032, 12246), -1),
+    'ideograph': (range(12832, 12873), -1),
+    'phaistos': (range(66000, 66046), 3),
+    'emoji': (
+        setrange(127789, 128765)
+        - setrange(127995, 128000)
+        - setrange(128337, 128348)
+        - setrange(128408, 128420)
+        - setrange(128728, 128733)
+        - setrange(128749, 128752)
+        | setrange(129292, 129536),
+        -1),
+    'alchemy': (setrange(128768, 128884), 3),
 }
 
 
 def get_poem(wordrange=(9, 15), wordsep="  \n", dictionary="taixuanjing"):
-    START, LENGTH, INDEX = GOOD_RANGES[dictionary]
-    coolwords = [unicodedata.name(chr(START + i)).split()[INDEX] for i in range(LENGTH)]
+    RANGE, INDEX = GOOD_RANGES[dictionary]
+    coolwords = [unicodedata.name(chr(i)).split()[INDEX] for i in RANGE]
     wordcount = random.randrange(*wordrange)
 
     words = random.sample(coolwords, wordcount)

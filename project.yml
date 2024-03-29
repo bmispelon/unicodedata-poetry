@@ -10,10 +10,10 @@ packages:
           webSecure: false
 
           triggers:
-          - name: cron-hourly
+          - name: cron-daily
             sourceType: scheduler
             sourceDetails:
-              cron: "30 * * * *"
+              cron: "0 6 * * *" # 6am daily
 
           environment:
               MASTODON_CLIENT_ID: "${MASTODON_CLIENT_ID}"
